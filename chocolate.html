@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chocolate Day 🍫</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<audio autoplay loop src="music/love.mp3" id="bgm"></audio>
+
+<div class="container">
+  <img id="rose-img" src="photos/p29.jpg">
+  <h1>🍫 Chocolate Day 🍫</h1>
+  <p id="timer"></p>
+
+  <button id="unlock" style="display:none" onclick="unlock()">Unlock 🍫</button>
+
+  <div id="content" class="hidden">
+
+    <!-- 💬 MESSAGE -->
+    <div id="preGameText">
+    <p style="font-size: larger;">
+      Happy Chocolate Day my princess 😘🍫<br>
+      Chocolate lene se pehle ek chhota sa game hai 😏 <br> Dekhte h kinna intelligent h princess mera<br> <br>
+    </p>
+    </div>
+
+
+    <!-- 🎮 GAME INTRO -->
+    <div id="gameIntro">
+      <p><b>🎯 Lekin inni easy ni h choclate lena<br>Agr choclate chahiye to level 10 complete krna pdega fir choclate mere princess ki 🍫</b></p>
+      <button onclick="playGame()">Play Game 🎮</button>
+    </div>
+
+    <!-- 🎉 AFTER GAME -->
+    <div id="afterGame" class="hidden">
+      <p>
+        Congratulations my smart princess 🥹❤️<br>Merko to pta hi tha meri princess intelligent h aaram se kr lena<br>
+        Achaa ye rha choclate ka pass niche jldi kholo khi pighal na gyi ho 🍫
+      </p>
+
+      <div class="password choco">
+        Box Password:<t></t>
+        <b>806</b><br>
+        <b>Chal jldi jldi krle open box ab</b>
+      </div>
+
+      <button onclick="location.href='date.html'">Next ➡️</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="timer.js"></script>
+
+<script>
+/* ⏳ Countdown */
+startCountdown(new Date(2026, 1, 9, 0, 0, 0));
+
+/* 🎶 Music */
+document.getElementById("bgm").volume = 0.07;
+
+/* 🔓 Unlock */
+function unlock(){
+  document.getElementById("content").classList.remove("hidden");
+  document.getElementById("unlock").style.display = "none";
+  document.getElementById("timer").style.display = "none";
+}
+
+/* 🎮 Open Simon Game */
+function playGame(){
+  localStorage.setItem("chocolateGame", "pending");
+  window.location.href = "simon/simon.html";
+}
+
+/* 🔙 Coming back from Simon */
+window.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("chocolateGame") === "won") {
+
+    if (window.unlock) window.unlock();
+
+    document.getElementById("content").classList.remove("hidden");
+
+    const unlockBtn = document.getElementById("unlock");
+    const timer = document.getElementById("timer");
+    if (unlockBtn) unlockBtn.style.display = "none";
+    if (timer) timer.style.display = "none";
+
+    const gameIntro = document.getElementById("gameIntro");
+    if (gameIntro) gameIntro.style.display = "none";
+
+    const preGameText = document.getElementById("preGameText");
+    if (preGameText) preGameText.style.display = "none";
+
+    document.getElementById("afterGame").classList.remove("hidden");
+
+    localStorage.removeItem("chocolateGame");
+  }
+});
+
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Rose Day 🌹</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <audio autoplay loop src="music/love.mp3" id="bgm"></audio>
+  
+  <div class="container">
+    <img id="rose-img" src="photos/p27.jpg">
+    <h1>🌹 Rose Day 🌹</h1>
+    <p id="timer"></p>
+
+    <!-- Unlock button -->
+    <button id="unlock" style="display:none" onclick="roseUnlock()">Unlock 🌹</button>
+    
+    <!-- Content (shown AFTER video) -->
+    <div id="content" class="hidden">
+      <p>
+        Rose to theek h lekin jo khusbu mere motu ke baalo me usse achi koi khushbi ho hi ni skti ❤️<br>
+        vese Finally happy rose day princess baby pyaru jaan mere, jaldi se pin dal aur box dekh ek pyaru sa phool h mere pyaru ke liye<br><br><br>
+        love uuuuuuuu mera princess baby 😘😘😘😘
+        <br><br>
+      </p>
+      
+      <button class="hold-btn">Hold to unlock box❤️</button>
+      
+      <div class="password hidden">
+        Password<t></t>
+        <b>143</b><br>
+        <b>Chal jldi jldi krle open box ab</b>
+      </div>
+      
+      
+      <button class="next-btn hidden" style="display:none"
+      onclick="location.href='date.html'">
+      Next Surprise ➡️
+    </button>
+  </div>
+</div>
+
+<!-- 🌹 Rose Day Video -->
+<div id="roseVideoOverlay" class="hidden">
+  <video id="roseVideo" src="videos/rose.mp4" playsinline muted></video>
+</div>
+
+<script src="hearts.js"></script>
+<script src="photos.js"></script>
+<script src="timer.js"></script>
+
+<script>
+  // test date (change later)
+  startCountdown(new Date(2026, 1, 7, 22, 0, 0));
+  // startCountdown("2026-02-03T00:00:00");
+  startPhotos();
+  
+  const music = document.getElementById("bgm");
+  music.volume = 0.2;
+  
+  function roseUnlock(){
+    // 🔑 tell timer.js we are unlocked
+    if (window.unlock) window.unlock();
+    
+    // hide UI
+    document.getElementById("timer").style.display = "none";
+    document.getElementById("unlock").style.display = "none";
+    
+    const overlay = document.getElementById("roseVideoOverlay");
+    const video = document.getElementById("roseVideo");
+    
+    overlay.classList.remove("hidden");
+    overlay.style.display = "block";
+    overlay.classList.add("fade-in");
+    
+    music.volume = 0.05;
+    
+    video.currentTime = 0;
+    video.play();
+    
+    video.onended = () => {
+      overlay.classList.remove("fade-in");
+      overlay.classList.add("fade-out");
+      
+      setTimeout(()=>{
+        overlay.classList.add("hidden");
+        overlay.style.display = "none";
+        overlay.classList.remove("fade-out");
+        
+        music.volume = 0.2;
+        
+        document.getElementById("content").classList.remove("hidden");
+        hidePass();
+        
+        setTimeout(()=>{
+          document.querySelector(".next-btn").style.display = "inline-block";
+        },1500);
+      },1000);
+      setupHoldToUnlock();
+    };
+  }
+</script>
+<script>
+  function setupHoldToUnlock(){
+    
+    const holdBtn = document.querySelector(".hold-btn");
+    const passwordBox = document.querySelector(".password");
+    const nextBtn = document.querySelector(".next-btn");
+    
+    let holdTimer;
+    
+    holdBtn.onmousedown = () => {
+      
+      holdBtn.innerText = "Unlocking... ❤️";
+      
+      holdTimer = setTimeout(()=>{
+        
+        holdBtn.style.display = "none";
+        
+        passwordBox.classList.remove("hidden");
+        
+        if(nextBtn) nextBtn.classList.remove("hidden");
+        
+        heartBurst();
+        
+      },3000);
+    };
+    
+    holdBtn.onmouseup = cancel;
+    holdBtn.onmouseleave = cancel;
+    
+    function cancel(){
+      clearTimeout(holdTimer);
+      holdBtn.innerText = "Hold to unlock ❤️";
+    }
+    
+  }
+</script>
+
+</body>
+</html>
+

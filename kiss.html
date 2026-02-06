@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>😘 Kiss Day 😘</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+body{
+  overflow:auto;
+}
+
+#content{
+  margin-top:20px;
+}
+
+/* typewriter */
+#typeText{
+  max-width:500px;
+  margin:20px auto;
+  font-size:20px;
+  white-space:pre-line;
+  min-height:140px;
+}
+
+/* scene */
+#kissScene{
+  width:400px;
+  height:180px;
+  margin:20px auto;
+  position:relative;
+  display:none;
+}
+
+/* characters */
+.character{
+  position:absolute;
+  bottom:0;
+  width:100px;
+}
+
+#man{
+  right:0;
+}
+
+#woman{
+  left:0;
+}
+
+/* boom */
+#boom{
+  position:absolute;
+  left:50%;
+  top:40%;
+  transform:translate(-50%,-50%);
+  font-size:40px;
+  display:none;
+}
+
+/* hold button */
+#holdBtn{
+  margin-top:20px;
+  display:none;
+}
+
+/* final message */
+#finalMessage{
+  display:none;
+  margin-top:20px;
+}
+
+</style>
+
+</head>
+<body>
+
+<audio id="bgm" autoplay loop src="music/love.mp3"></audio>
+
+<div class="container">
+<img id="rose-img" src="photos/p32.jpg">
+
+<h1>😘 Kiss Day 😘</h1>
+
+<p id="timer"></p>
+
+<button id="unlock" style="display:none">Unlock 😘</button>
+
+<div id="content" class="hidden">
+
+<p id="typeText"></p>
+
+<div id="kissScene">
+
+<img src="photos/woman.png" id="woman" class="character">
+
+<img src="photos/man.png" id="man" class="character">
+
+<div id="boom">💥💋</div>
+
+</div>
+
+<button id="holdBtn">Hold to kiss me 💋</button>
+
+<div id="finalMessage">
+
+<h2>
+Chalo finally kiss krdi mere motu ne merko ab acha lgra h❤️<br>
+ye kiss to mai hmesa ydd rkhuga meri first valentine kiss💋
+</h2>
+
+<button onclick="location.href='date.html'">
+Next ➡️
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="hearts.js"></script>
+<script src="photos.js"></script>
+<script src="timer.js"></script>
+
+<script>
+
+
+startCountdown(new Date(2026, 1, 13, 0, 0, 0));
+
+document.getElementById("bgm").volume=0.07;
+
+startPhotos();
+
+const unlockBtn=document.getElementById("unlock");
+const content=document.getElementById("content");
+
+const typeText=document.getElementById("typeText");
+
+const scene=document.getElementById("kissScene");
+
+const woman=document.getElementById("woman");
+
+const holdBtn=document.getElementById("holdBtn");
+
+const boom=document.getElementById("boom");
+
+const finalMessage=document.getElementById("finalMessage");
+
+
+/* unlock */
+unlockBtn.onclick=()=>{
+
+  if(window.unlock) window.unlock();
+
+  unlockBtn.style.display="none";
+
+  document.getElementById("timer").style.display="none";
+
+  content.classList.remove("hidden");
+
+  stopPhotos();
+
+  startTyping();
+};
+
+
+
+/* typewriter */
+const msg=`Mere haar kiss ke piche ek promise h ❤️
+ki mai apni princess ko aur aur bhot bhot jyada pyaar krta hu aur krta rhuga
+aur har din usse jyada kruga ❤️
+
+Shayad aaj tu amritsar ho...
+islie ek online kissi mere princess ke liye 😘
+
+Mujhe bhi kiss kr ab`;
+
+let i=0;
+
+function startTyping(){
+
+  function type(){
+
+    if(i<msg.length){
+
+      typeText.innerHTML+=msg.charAt(i);
+
+      i++;
+
+      setTimeout(type,150);
+
+    }
+    else{
+
+      /* show slider AFTER typing */
+      scene.style.display="block";
+
+      holdBtn.style.display="inline-block";
+
+    }
+
+  }
+
+  type();
+}
+
+
+
+/* slider physics */
+let pos=0;
+let holding=false;
+let animation;
+
+
+/* move right */
+function moveRight(){
+
+  if(!holding) return;
+
+  pos+=0.1;
+
+  if(pos>=200){
+
+    kiss();
+
+    return;
+
+  }
+
+  woman.style.left=pos+"px";
+
+  animation=requestAnimationFrame(moveRight);
+
+}
+
+
+/* move left */
+function moveLeft(){
+
+  if(holding) return;
+
+  pos-=1.2;
+
+  if(pos<=0){
+
+    pos=0;
+
+    woman.style.left="0px";
+
+    return;
+
+  }
+
+  woman.style.left=pos+"px";
+
+  animation=requestAnimationFrame(moveLeft);
+
+}
+
+
+/* hold start */
+holdBtn.onmousedown=()=>{
+
+  holding=true;
+
+  holdBtn.innerText="Kissing... 💋";
+
+  moveRight();
+
+};
+
+
+/* release */
+holdBtn.onmouseup=release;
+holdBtn.onmouseleave=release;
+
+function release(){
+
+  holding=false;
+
+  holdBtn.innerText="Hold to kiss me 💋";
+
+  moveLeft();
+
+}
+
+
+/* kiss reached */
+function kiss(){
+
+  cancelAnimationFrame(animation);
+
+  boom.style.display="block";
+
+  heartBurst();
+
+  holdBtn.style.display="none";
+
+  setTimeout(()=>{
+
+    finalMessage.style.display="block";
+
+  },800);
+
+}
+
+
+/* hearts */
+function heartBurst(){
+
+  for(let i=0;i<40;i++){
+
+    const heart=document.createElement("div");
+
+    heart.className="heart";
+
+    heart.style.left=Math.random()*100+"vw";
+
+    heart.style.animationDuration=(2+Math.random()*2)+"s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(()=>heart.remove(),4000);
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>

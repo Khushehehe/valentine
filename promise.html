@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Promise Day 🤝</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+#content{
+  margin-top:25px;
+}
+
+#envelope{
+  width:400px;
+  cursor:pointer;
+  margin-top:20px;
+}
+
+#messageBox{
+  max-width:500px;
+  margin-top:20px;
+}
+
+#typeText{
+  white-space:pre-line;
+  min-height:140px;
+  font-size:18px;
+}
+
+#holdBtn{
+  display:none;
+  margin-top:20px;
+}
+
+#passwordBox{
+  margin-top:20px;
+}
+
+#nextBtn{
+  margin-top:20px;
+}
+
+</style>
+
+</head>
+<body>
+
+<audio autoplay loop src="music/love.mp3" id="bgm"></audio>
+
+<div class="container">
+
+<img id="rose-img" src="photos/p31.jpg">
+
+<h1>🤝 Promise Day 🤝</h1>
+
+<p id="timer"></p>
+
+<button id="unlock" style="display:none">Unlock 🤝</button>
+
+
+<!-- MAIN CONTENT -->
+<div id="content" class="hidden">
+
+  <img src="photos/envelope.png" id="envelope">
+
+  <p id="openText">Open it princu 💌</p>
+
+  <div id="messageBox" class="hidden">
+
+    <p id="typeText"></p>
+
+    <button id="holdBtn">Hold to unlock ❤️</button>
+
+    <div id="passwordBox" class="password hidden">
+      Password:<br>
+      <b>739</b>
+    </div>
+
+    <button id="nextBtn" class="hidden"
+            onclick="location.href='date.html'">
+      Next ➡️
+    </button>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<script src="hearts.js"></script>
+<script src="timer.js"></script>
+
+
+<script>
+
+/* Start countdown */
+startCountdown(new Date(2026, 1, 11, 0, 0, 0));
+
+/* music volume */
+document.getElementById("bgm").volume = 0.07;
+
+
+/* AFTER PAGE LOAD */
+window.addEventListener("DOMContentLoaded", () => {
+
+  const unlockBtn = document.getElementById("unlock");
+
+  const envelope = document.getElementById("envelope");
+
+  const openText = document.getElementById("openText");
+
+  const messageBox = document.getElementById("messageBox");
+
+  const typeText = document.getElementById("typeText");
+
+  const holdBtn = document.getElementById("holdBtn");
+
+  const passwordBox = document.getElementById("passwordBox");
+
+  const nextBtn = document.getElementById("nextBtn");
+
+
+  /* unlock click (uses timer.js unlock safely) */
+  unlockBtn.addEventListener("click", () => {
+
+    if(window.unlock) window.unlock();
+
+    document.getElementById("content").classList.remove("hidden");
+
+  });
+
+
+  /* envelope click */
+  envelope.onclick = () => {
+
+    envelope.style.display="none";
+
+    openText.style.display="none";
+
+    messageBox.classList.remove("hidden");
+
+    startTyping();
+
+  };
+
+
+  /* typewriter */
+  const message =
+`I promise ki mai lifetime apni motu ko princess ki trah rkhuga ❤️
+I promise mai princess ko icecream khilauga 🍨
+I promise mai princess ko duniya me sabse jyada pyaar kruga ❤️
+
+Vo na next days ke bhi envelops usme h to its on u ki aap unhe time aane par dekhoge ya abhi umm i prefer time aane par`;
+
+
+  let index=0;
+
+  function startTyping(){
+
+    if(index < message.length){
+
+      typeText.innerHTML += message.charAt(index);
+
+      index++;
+
+      setTimeout(startTyping,150);
+
+    }
+    else{
+
+      holdBtn.style.display="inline-block";
+
+    }
+
+  }
+
+
+  /* hold unlock */
+  let holdTimer;
+
+  holdBtn.onmousedown = () => {
+
+    holdBtn.innerText="Unlocking... ❤️";
+
+    holdTimer=setTimeout(finalUnlock,2000);
+
+  };
+
+  holdBtn.onmouseup = cancelHold;
+
+  holdBtn.onmouseleave = cancelHold;
+
+
+  function cancelHold(){
+
+    clearTimeout(holdTimer);
+
+    holdBtn.innerText="Hold to unlock ❤️";
+
+  }
+  
+
+
+  function finalUnlock(){
+
+    holdBtn.style.display="none";
+
+    passwordBox.classList.remove("hidden");
+
+    nextBtn.classList.remove("hidden");
+
+    heartBurst();
+
+  }
+
+
+  /* heart burst */
+  function heartBurst(){
+
+    for(let i=0;i<30;i++){
+
+      const heart=document.createElement("div");
+
+      heart.className="heart";
+
+      heart.style.left=Math.random()*100+"vw";
+
+      heart.style.animationDuration=(2+Math.random()*2)+"s";
+
+      document.body.appendChild(heart);
+
+      setTimeout(()=>heart.remove(),4000);
+
+    }
+
+  }
+
+
+});
+
+</script>
+
+
+</body>
+</html>
